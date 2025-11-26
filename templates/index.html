@@ -1,0 +1,539 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Tile Catalog</title>
+
+<style>
+:root{
+  --accent:#1f2937;
+  --highlight:#2563eb;
+  --light:#f8fafc;
+  --border:#e2e8f0;
+  --selected:#dbeafe;
+  --danger:#b91c1c;
+  --text:#0f172a;
+  --muted:#64748b;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  margin:0;
+  font-family:Segoe UI, system-ui, sans-serif;
+  background:#f4f6f8;
+  color:var(--text);
+}
+
+/* ===== HEADER ===== */
+header{
+  background:var(--accent);
+  color:white;
+  padding:16px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.brand img{
+  height:40px;
+  padding:6px;
+  border-radius:6px;
+  background:white;
+}
+.brand h1{margin:0;font-size:20px;}
+.brand p{margin:0;font-size:12px;color:#cbd5e1;}
+
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+.controls input{
+  padding:7px;
+  border-radius:6px;
+  border:none;
+  width:200px;
+}
+
+/* Buttons */
+button, .btn{
+  border:none;
+  border-radius:6px;
+  padding:7px 12px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:500;
+  text-decoration:none;
+}
+.btn-blue{background:var(--highlight);color:white;}
+.btn-dark{background:#334155;color:white;}
+.btn-red{background:var(--danger);color:white;}
+button:hover,.btn:hover{opacity:0.9;}
+
+/* ===== MAIN WRAPPER ===== */
+.container{
+  padding:20px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  font-size:13px;
+  color:var(--muted);
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* left part of toolbar */
+.toolbar-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* right part of toolbar */
+.toolbar-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.toolbar select,
+.toolbar input.search-input{
+  padding:6px 8px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  font-size:13px;
+}
+
+.toolbar input.search-input{
+  width:220px;
+}
+
+/* ===== GRID / LIST AREA ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:14px;
+}
+
+/* Card base */
+.card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px;
+  transition:.15s;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,0.08);
+  border-color:var(--highlight);
+}
+.card.selected{
+  background:var(--selected);
+  border:2px solid var(--highlight);
+}
+
+/* Thumbnail */
+.thumb{
+  background:#f1f5f9;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  height:140px;
+}
+.thumb img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+
+/* Content area */
+.card-body{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  flex:1;
+  gap:6px;
+}
+
+.title-block{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.title-block-left strong{
+  font-size:14px;
+}
+.meta{
+  font-size:13px;
+  color:var(--muted);
+}
+.meta b{color:var(--text);}
+
+.footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:13px;
+}
+
+.card-select-label{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+}
+
+/* make checkbox bigger */
+.card-select-label input[type="checkbox"]{
+  width:16px;
+  height:16px;
+}
+
+/* ===== LIST VIEW MODE ===== */
+#page.list-view .grid{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* In list view, card becomes horizontal row */
+#page.list-view .card{
+  flex-direction:row;
+  align-items:stretch;
+  padding:10px;
+}
+#page.list-view .thumb{
+  width:160px;
+  height:110px;
+  flex-shrink:0;
+}
+#page.list-view .card-body{
+  padding-left:10px;
+}
+
+/* Make footer stick to bottom in list view */
+#page.list-view .card-body{
+  display:flex;
+}
+#page.list-view .footer{
+  margin-top:auto;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .controls{
+    justify-content:flex-start;
+  }
+  #page.list-view .card{
+    flex-direction:column;
+  }
+  #page.list-view .thumb{
+    width:100%;
+    height:140px;
+  }
+  #page.list-view .card-body{
+    padding-left:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <img src="/static/logo/logo.jpg" alt="Logo" onerror="this.style.display='none'">
+    <div>
+      <h1>Tile Catalog</h1>
+      <p>Professional Tile Management</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input id="clientName" placeholder="Client name">
+    <a href="/upload_tile" class="btn btn-dark">Add Tile</a>
+    <a href="/upload_excel" class="btn btn-dark">Upload Excel</a>
+    <button class="btn btn-blue" onclick="generatePdf()">Generate PDF</button>
+    <button class="btn btn-red" onclick="deleteSelected()">Delete</button>
+  </div>
+</header>
+
+<div class="container" id="page">
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div><b>{{ tiles|length }}</b> tiles</div>
+      <!-- Search box -->
+      <input
+        id="searchInput"
+        class="search-input"
+        type="text"
+        placeholder="Search by name / size / finish"
+        oninput="filterTiles()">
+      <!-- Finish filter -->
+      <select id="finishFilter" onchange="filterTiles()">
+        <option value="">All finishes</option>
+        <!-- options will be filled by JS from tiles -->
+      </select>
+    </div>
+
+    <div class="toolbar-right">
+      View:
+      <button class="btn btn-dark" type="button" onclick="setView('grid')">Grid</button>
+      <button class="btn btn-dark" type="button" onclick="setView('list')">List</button>
+
+      <select id="sortSelect" onchange="sortTiles()">
+        <option value="latest">Latest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="az">Name A → Z</option>
+        <option value="za">Name Z → A</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="grid" class="grid">
+    {% for tile in tiles %}
+    <div class="card"
+         data-id="{{ tile.id }}"
+         data-name="{{ (tile.name or '')|lower }}"
+         data-size="{{ (tile.size or '')|lower }}"
+         data-finish="{{ (tile.tags or '')|lower }}"
+         onclick="toggleCardSelect(this)">
+      <div class="thumb">
+        {% if tile.web_path %}
+          <img src="{{ tile.web_path }}" alt="{{ tile.name }}">
+        {% else %}
+          <img src="https://via.placeholder.com/300x200?text=No+Image" alt="No image">
+        {% endif %}
+      </div>
+
+      <div class="card-body">
+        <div class="title-block">
+          <div class="title-block-left">
+            <strong>{{ tile.name }}</strong><br>
+            <span class="meta">
+              Size: {{ tile.size or '-' }}
+              {% if tile.tags %}
+                · Finish: {{ tile.tags }}
+              {% endif %}
+            </span>
+          </div>
+        </div>
+
+        <div class="footer">
+          <label class="meta card-select-label" onclick="event.stopPropagation()">
+            <input type="checkbox"
+                   class="tile-checkbox"
+                   value="{{ tile.id }}"
+                   onclick="event.stopPropagation()">
+            <span>Select</span>
+          </label>
+
+          <a href="javascript:void(0)"
+             class="btn btn-blue"
+             onclick="event.stopPropagation(); downloadSinglePdf({{ tile.id }});">
+            PDF
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+function setView(type){
+  const page = document.getElementById("page");
+  if(type === "list"){
+    page.classList.add("list-view");
+  } else {
+    page.classList.remove("list-view");
+  }
+}
+
+/* Click anywhere on card to select/unselect */
+function toggleCardSelect(card){
+  const checkbox = card.querySelector(".tile-checkbox");
+  const labelText = card.querySelector(".card-select-label span");
+
+  if(checkbox.checked){
+    checkbox.checked = false;
+    card.classList.remove("selected");
+    if(labelText) labelText.textContent = "Select";
+  } else {
+    checkbox.checked = true;
+    card.classList.add("selected");
+    if(labelText) labelText.textContent = "Selected";
+  }
+}
+
+function downloadSinglePdf(tileId){
+  const client = document.getElementById("clientName").value || "";
+  const pdfName = prompt("Enter PDF name (optional):", "");
+  let url = `/generate_pdf/${tileId}?client_name=${encodeURIComponent(client)}`;
+  if(pdfName){
+    url += `&pdf_name=${encodeURIComponent(pdfName)}`;
+  }
+  window.location = url;
+}
+
+function generatePdf(){
+  const selected = document.querySelectorAll(".tile-checkbox:checked");
+  if(selected.length === 0){
+    alert("Select at least one tile");
+    return;
+  }
+
+  const pdfName = prompt("Enter PDF name (optional):", "");
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = "/generate_pdf_multiple";
+
+  selected.forEach(cb=>{
+    const input = document.createElement("input");
+    input.type="hidden";
+    input.name="tile_ids";
+    input.value=cb.value;
+    form.appendChild(input);
+  });
+
+  const clientInput = document.createElement("input");
+  clientInput.type="hidden";
+  clientInput.name="client_name";
+  clientInput.value=document.getElementById("clientName").value;
+  form.appendChild(clientInput);
+
+  if(pdfName){
+    const pdfInput = document.createElement("input");
+    pdfInput.type = "hidden";
+    pdfInput.name = "pdf_name";
+    pdfInput.value = pdfName;
+    form.appendChild(pdfInput);
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+}
+
+function deleteSelected(){
+  const selected = document.querySelectorAll(".tile-checkbox:checked");
+  if(selected.length === 0){
+    alert("Select tiles to delete");
+    return;
+  }
+  if(!confirm("Delete selected tiles?")) return;
+
+  const form=document.createElement("form");
+  form.method="POST";
+  form.action="/delete_tiles";
+
+  selected.forEach(cb=>{
+    const input=document.createElement("input");
+    input.type="hidden";
+    input.name="tile_ids";
+    input.value=cb.value;
+    form.appendChild(input);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+}
+
+/* Sorting (id or name) */
+function sortTiles(){
+  const val = document.getElementById("sortSelect").value;
+  const grid = document.getElementById("grid");
+  const cards = Array.from(grid.children);
+
+  let sorted;
+
+  if(val==="az"){
+    sorted = cards.sort((a,b)=>a.dataset.name.localeCompare(b.dataset.name));
+  } else if(val==="za"){
+    sorted = cards.sort((a,b)=>b.dataset.name.localeCompare(a.dataset.name));
+  } else if(val==="oldest"){
+    sorted = cards.sort((a,b)=>a.dataset.id - b.dataset.id);
+  } else {
+    sorted = cards.sort((a,b)=>b.dataset.id - a.dataset.id);
+  }
+
+  grid.innerHTML="";
+  sorted.forEach(c=>grid.appendChild(c));
+}
+
+/* Search + Finish filter */
+function filterTiles(){
+  const search = (document.getElementById("searchInput").value || "").toLowerCase().trim();
+  const finishVal = (document.getElementById("finishFilter").value || "").toLowerCase();
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card=>{
+    const name = (card.dataset.name || "");
+    const size = (card.dataset.size || "");
+    const finish = (card.dataset.finish || "");
+
+    const matchSearch =
+      !search ||
+      name.includes(search) ||
+      size.includes(search) ||
+      finish.includes(search);
+
+    const matchFinish =
+      !finishVal || finish === finishVal;
+
+    if(matchSearch && matchFinish){
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+
+/* Build finish dropdown options from tiles */
+document.addEventListener("DOMContentLoaded", ()=>{
+  const cards = document.querySelectorAll(".card");
+  const finishes = new Set();
+  cards.forEach(card=>{
+    const f = (card.dataset.finish || "").trim();
+    if(f){
+      finishes.add(f.toLowerCase());
+    }
+  });
+
+  const select = document.getElementById("finishFilter");
+  finishes.forEach(f=>{
+    const opt = document.createElement("option");
+    opt.value = f;
+    opt.textContent = f.toUpperCase();
+    select.appendChild(opt);
+  });
+});
+</script>
+
+</body>
+</html>

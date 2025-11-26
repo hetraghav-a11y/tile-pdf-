@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Select Tiles</title>
+  <style>
+    body{ font-family:Arial;margin:20px }
+    .tile-box{
+      border:1px solid #ccc;
+      padding:10px;
+      margin:10px;
+      width:220px;
+      display:inline-block;
+      vertical-align:top;
+    }
+    img{ width:200px;height:120px;object-fit:cover }
+  </style>
+</head>
+<body>
+
+<h2>Select Tiles for PDF</h2>
+
+<form action="/generate_pdf_multiple" method="post" enctype="multipart/form-data">
+
+  <label><b>Client Name:</b></label><br>
+  <input type="text" name="client_name" placeholder="Client Name"><br><br>
+
+  <label><b>Upload Logo:</b></label><br>
+  <input type="file" name="logo" accept="image/*"><br><br>
+
+  <button type="submit">Generate PDF</button>
+
+  <hr>
+
+  {% for t in tiles %}
+  <div class="tile-box">
+    <label>
+      <input type="checkbox" name="tile_ids" value="{{ t.id }}">
+      <b>{{ t.name }}</b>
+    </label><br>
+
+    {% if t.web_path %}
+      <img src="{{ t.web_path }}">
+    {% elif t.photo_path %}
+      <img src="/{{ t.photo_path }}">
+    {% else %}
+      <div style="width:200px;height:120px;background:#eee;text-align:center;line-height:120px;">
+        No Image
+      </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</form>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Add Tile</title>
+  <style>
+    :root{
+      --accent:#1f2937;
+      --border:#e2e8f0;
+      --bg:#f4f6f8;
+      --text:#0f172a;
+      --muted:#64748b;
+      --btn:#2563eb;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:Segoe UI, system-ui, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    header{
+      background:var(--accent);
+      color:white;
+      padding:14px 20px;
+    }
+    header h1{margin:0;font-size:20px;}
+    header p{margin:2px 0 0;font-size:12px;color:#cbd5e1;}
+
+    .wrap{
+      max-width:600px;
+      margin:20px auto;
+      background:#fff;
+      border-radius:10px;
+      border:1px solid var(--border);
+      padding:18px 20px 20px;
+      box-shadow:0 6px 18px rgba(15,23,42,0.08);
+    }
+    h2{
+      margin-bottom:10px;
+      font-size:18px;
+    }
+    .field{
+      margin-bottom:12px;
+    }
+    label{
+      display:block;
+      font-size:13px;
+      margin-bottom:4px;
+      color:var(--muted);
+    }
+    input[type="text"],
+    textarea,
+    input[type="file"]{
+      width:100%;
+      padding:8px;
+      border-radius:6px;
+      border:1px solid var(--border);
+      font-size:14px;
+    }
+    textarea{
+      resize:vertical;
+      min-height:70px;
+    }
+    .actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:10px;
+    }
+    .btn{
+      border:none;
+      border-radius:6px;
+      padding:7px 14px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:500;
+      text-decoration:none;
+    }
+    .btn-primary{background:var(--btn);color:white;}
+    .btn-secondary{background:#e5e7eb;color:#111827;}
+    .btn:hover{opacity:.9;}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Add Tile</h1>
+  <p>Only Name, Size, Finish and Description are required here.</p>
+</header>
+
+<div class="wrap">
+  <h2>Tile details</h2>
+  <form method="post" enctype="multipart/form-data">
+    <div class="field">
+      <label for="name">Design name *</label>
+      <input id="name" name="name" type="text" required placeholder="Example: BRG, Cloud White">
+    </div>
+
+    <div class="field">
+      <label for="size">Size</label>
+      <input id="size" name="size" type="text" placeholder="Example: 600x1200 MM">
+    </div>
+
+    <div class="field">
+      <label for="finish">Finish</label>
+      <input id="finish" name="finish" type="text" placeholder="Example: GLOSSY, MATT">
+    </div>
+
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" placeholder="Optional notes about this tile"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="photo">Tile photo</label>
+      <input id="photo" name="photo" type="file" accept="image/*">
+    </div>
+
+    <div class="actions">
+      <a href="/" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">Save tile</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>
